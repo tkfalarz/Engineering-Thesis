@@ -1,3 +1,6 @@
 [submodule "DotnetApi"]
 	path = DotnetApi
 	url = https://github.com/tkfalarz/ET-Dotnet-API.git
+[submodule "Bme680"]
+	path = Bme680
+	url = https://github.com/tkfalarz/ET-BME680-Sensor.git
