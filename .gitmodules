@@ -1,0 +1,3 @@
+[submodule "DotnetApi"]
+	path = DotnetApi
+	url = https://github.com/tkfalarz/ET-Dotnet-API.git
