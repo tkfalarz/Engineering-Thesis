@@ -4,9 +4,10 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - ET-WebAPI
 
 on:
+  pull_request:
+    branches: [ main ]
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -32,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}/DotnetApi
 
   deploy:
     runs-on: ubuntu-latest
