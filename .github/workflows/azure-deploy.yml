@@ -25,6 +25,11 @@ jobs:
           dotnet-version: '5.0.x'
           include-prerelease: true
 
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
       - name: See wtf is going on
         run: cd $GITHUB_WORKSPACE && pwd && cd DotnetApi && pwd && ls -a
       
