@@ -11,57 +11,48 @@ on:
   workflow_dispatch:
 
 jobs:
-#   build:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - uses: actions/checkout@v2
-
-#       - name: Set up .NET Core
-#         uses: actions/setup-dotnet@v1
-#         with:
-#           dotnet-version: '5.0.x'
-#           include-prerelease: true
-
-#       - name: Checkout repository and submodules
-#         uses: actions/checkout@v2
-#         with:
-#           submodules: recursive
-          
-#       - name: Build with dotnet
-#         run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ -c Release
-
-#       - name: dotnet publish
-#         run: |
-#           dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ \
-#           -c Release \
-#           -o ${{env.DOTNET_ROOT}}/DotnetApi \
-#           --no-build
-
-#       - name: Upload artifact for deployment job
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: .net-app
-#           path: ${{env.DOTNET_ROOT}}/DotnetApi
-
-  migrate-sql-database:
+  build:
     runs-on: ubuntu-latest
-      
+
     steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+          include-prerelease: true
+
       - name: Checkout repository and submodules
         uses: actions/checkout@v2
         with:
           submodules: recursive
           
-      - name: Build with dotnet
-        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ -c Release
+      - name: Build Api
+        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ -c Release -o ${{env.DOTNET_ROOT}}/builds/api
 
-      - name: dotnet publish
-        run: |
-          dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ \
-          -c Release \
-          -o ${{env.DOTNET_ROOT}}/DotnetApi \
-          --no-build
+      - name: Upload api build for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app-build
+          path: ${{env.DOTNET_ROOT}}/builds/api
+          
+  migrate-sql-database:
+    runs-on: ubuntu-latest
+    needs: build
+      
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app-build
+          
+#       - name: publish database
+#         run: |
+#           dotnet publish ${{env.DOTNET_ROOT}}/builds/api/ET.WebAPI.Database \
+#           -c Release \
+#           -o ${{env.DOTNET_ROOT}}/artifacts/database \
+#           --no-build
           
       - name: Install EF Tool
         run: |
@@ -71,7 +62,7 @@ jobs:
       - name: Generate migration SQL script
         run: | 
           dotnet ef migrations script \
-          --project ${{env.DOTNET_ROOT}}/Database \
+          --project ${{env.DOTNET_ROOT}}/builds/api/ET.WebAPI.Database \
           --no-build \
           --idempotent \
           --context ApiDbContext \
@@ -92,10 +83,19 @@ jobs:
 #       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
 #     steps:
+
 #       - name: Download artifact from build job
 #         uses: actions/download-artifact@v2
 #         with:
 #           name: .net-app
+
+
+#       - name: dotnet publish
+#         run: |
+#           dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ \
+#           -c Release \
+#           -o ${{env.DOTNET_ROOT}}/DotnetApi \
+#           --no-build
 
 #       - name: Deploy to Azure Web App
 #         id: deploy-to-webapp
