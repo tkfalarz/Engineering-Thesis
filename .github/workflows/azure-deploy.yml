@@ -29,7 +29,7 @@ jobs:
           submodules: recursive
           
       - name: Build with dotnet
-        run: ls $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ && dotnet build -o $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ET.WebAPI.Api.csproj --configuration Release
+        run: $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ dotnet build -configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
