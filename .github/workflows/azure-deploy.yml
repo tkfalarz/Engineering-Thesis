@@ -46,10 +46,6 @@ jobs:
 
   migrate-sql-database:
     runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
       
     steps:
       - name: Checkout repository and submodules
