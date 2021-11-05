@@ -32,7 +32,7 @@ jobs:
         run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ --configuration Release
 
       - name: dotnet publish
-        run: pwd && dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
+        run: ls && dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
