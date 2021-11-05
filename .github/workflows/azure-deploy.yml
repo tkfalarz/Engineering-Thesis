@@ -54,15 +54,13 @@ jobs:
           submodules: recursive
           
       - name: Build with dotnet
-        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database/ -c Release
+        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ -c Release
 
       - name: dotnet publish
         run: |
-          ls ${{ env.DOTNET_ROOT }} \
-          pwd ${{ env.DOTNET_ROOT }} \
-          dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database/ \
+          dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ \
           -c Release \
-          -o ${{ env.DOTNET_ROOT }}/Database \
+          -o ${{env.DOTNET_ROOT}}/DotnetApi \
           --no-build
           
       - name: Install EF Tool
