@@ -46,7 +46,7 @@ jobs:
   migrate-sql-database:
     runs-on: ubuntu-latest
     env:
-      SQL_CONNECTION_STRING: 'Server=tcp:${{secrets.SQL_SERVER_URL}},1433;Initial Catalog=${{secrets.SQL_DATABASE_NAME}};Persist Security Info=False;User ID={{sql.SQL_LOGIN}};Password=${{secrets.SQL_PASSWORD}};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+      SQL_CONNECTION_STRING: 'Server=tcp:${{secrets.SQL_SERVER_URL}},1433;Initial Catalog=${{secrets.SQL_DATABASE_NAME}};Persist Security Info=False;User ID=${{secrets.SQL_LOGIN}};Password=${{secrets.SQL_PASSWORD}};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
         
     steps:
       - name: Set up .NET Core
