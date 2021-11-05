@@ -31,7 +31,7 @@ jobs:
           submodules: recursive
           
       - name: Build with dotnet
-        run: dotnet build -o ${{env.DOTNET_API_PROJECT_DIRECTORY}}/ET.WebAPI.Api --configuration Release
+        run: ls -l ${{env.DOTNET_API_PROJECT_DIRECTORY}}/ET.WebAPI.Api/ && dotnet build -o ${{env.DOTNET_API_PROJECT_DIRECTORY}}/ET.WebAPI.Api/ --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
