@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ROOT_WORKING_DIRECTORY: '$GITHUB_WORKSPACE/DotnetApi/'
+      DOTNET_API_PROJECT_DIRECTORY: '$GITHUB_WORKSPACE/DotnetApi/'
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
           submodules: recursive
           
       - name: Build with dotnet
-        run: ls ${{env.ROOT_WORKING_DIRECTORY}} && dotnet build -o ${{env.ROOT_WORKING_DIRECTORY}} --configuration Release
+        run: dotnet build -o ${{env.DOTNET_API_PROJECT_DIRECTORY}}/ET.WebAPI.Api --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
