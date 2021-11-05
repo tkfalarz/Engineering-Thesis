@@ -45,7 +45,6 @@ jobs:
           
   migrate-sql-database:
     runs-on: ubuntu-latest
-    needs: build
       
     steps:
       - name: Set up .NET Core
@@ -54,11 +53,13 @@ jobs:
           dotnet-version: '5.0.x'
           include-prerelease: true
           
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v2
         with:
-          name: database-build
-          path: ${{env.DOTNET_ROOT}}/database
+          submodules: recursive
+          
+      - name: Build ET.WebAPI.Database project
+        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database/ -c Release
           
       - name: Install EF Tool
         run: |
@@ -67,9 +68,8 @@ jobs:
     
       - name: Generate migration SQL script
         run: |
-          ls ${{env.DOTNET_ROOT}}/database \
           dotnet ef migrations script \
-          --project ${{env.DOTNET_ROOT}}/database \
+          --project $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database/ \
           --no-build \
           --idempotent \
           --context ApiDbContext \
