@@ -73,6 +73,7 @@ jobs:
           --no-build \
           --idempotent \
           --context ApiDbContext \
+          --configuration Release \
           --output ${{env.DOTNET_ROOT}}/sql/sql-script.sql
         
       - name: Azure SQL Deploy
