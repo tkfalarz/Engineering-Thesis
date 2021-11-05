@@ -26,7 +26,7 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: echo "Variable is ${{env.ROOT_WORKING_DIRECTORY}}"
+        run: dotnet build -o ${{env.ROOT_WORKING_DIRECTORY}}/ET.WebAPI.Api --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
