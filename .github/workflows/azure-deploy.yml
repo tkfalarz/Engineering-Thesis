@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ROOT_WORKING_DIRECTORY: '${GITHUB_WORKSPACE}/DotnetApi'
+      ROOT_WORKING_DIRECTORY: '${{GITHUB_WORKSPACE}}/DotnetApi'
 
     steps:
       - uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build -o ROOT_WORKING_DIRECTORY --configuration Release
+        run: dotnet build -o ${{ROOT_WORKING_DIRECTORY}} --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
