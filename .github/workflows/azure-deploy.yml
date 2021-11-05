@@ -29,12 +29,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-
-      - name: See wtf is going on
-        run: cd $GITHUB_WORKSPACE && pwd && cd DotnetApi && pwd && ls -a
-      
+          
       - name: Build with dotnet
-        run: dotnet build -o ${{env.ROOT_WORKING_DIRECTORY}}/ET.WebAPI.Api --configuration Release
+        run: dotnet build -o ${{env.ROOT_WORKING_DIRECTORY}} --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
