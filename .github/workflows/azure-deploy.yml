@@ -14,7 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ROOT_WORKING_DIRECTORY: $GITHUB_WORKSPACE/DotnetApi
+      ROOT_WORKING_DIRECTORY: '$GITHUB_WORKSPACE/DotnetApi'
 
     steps:
       - uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
           include-prerelease: true
 
       - name: See wtf is going on
-        run: cd '${{env.ROOT_WORKING_DIRECTORY}}' | ls -a
+        run: cd ${{env.ROOT_WORKING_DIRECTORY}} | ls -a
       
       - name: Build with dotnet
         run: dotnet build -o ${{env.ROOT_WORKING_DIRECTORY}}/ET.WebAPI.Api --configuration Release
