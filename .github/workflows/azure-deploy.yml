@@ -32,10 +32,7 @@ jobs:
         run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ -c Release
 
       - name: dotnet publish
-        run: |
-          dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ 
-          -c Release 
-          -o ${{env.DOTNET_ROOT}}/DotnetApi
+        run: dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -60,11 +57,11 @@ jobs:
     
       - name: Generate migration SQL script
         run: | 
-          dotnet ef migrations script 
-          --project $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database 
-          --no-build 
-          --idempotent 
-          --context ApiDbContext 
+          dotnet ef migrations script /
+          --project $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database /
+          --no-build /
+          --idempotent /
+          --context ApiDbContext /
           --output ${{env.DOTNET_ROOT}}/sql/sql-script.sql
         
       - name: Azure SQL Deploy
