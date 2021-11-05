@@ -26,7 +26,7 @@ jobs:
           include-prerelease: true
 
       - name: See wtf is going on
-        run: cd $GITHUB_WORKSPACE | cd DotnetApi | pwd | ls -a
+        run: cd $GITHUB_WORKSPACE && pwd && cd DotnetApi && pwd && ls -a
       
       - name: Build with dotnet
         run: dotnet build -o ${{env.ROOT_WORKING_DIRECTORY}}/ET.WebAPI.Api --configuration Release
