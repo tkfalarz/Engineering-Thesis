@@ -29,10 +29,10 @@ jobs:
           submodules: recursive
           
       - name: Build with dotnet
-        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ --configuration Release
+        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ --c Release
 
       - name: dotnet publish
-        run: ls $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/bin/Release/net5.0/  && dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/bin/Release/net5.0/ -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
+        run: dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ -c Release -o ${{env.DOTNET_ROOT}}/DotnetApi
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
