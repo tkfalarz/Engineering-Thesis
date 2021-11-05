@@ -45,7 +45,9 @@ jobs:
           
   migrate-sql-database:
     runs-on: ubuntu-latest
-      
+    env:
+      SQL_CONNECTION_STRING: 'Server=tcp:${{secrets.SQL_SERVER_URL}},1433;Initial Catalog=${{secrets.SQL_DATABASE_NAME}};Persist Security Info=False;User ID={{sql.SQL_LOGIN}};Password=${{secrets.SQL_PASSWORD}};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+        
     steps:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -75,14 +77,12 @@ jobs:
           --context ApiDbContext \
           --configuration Release \
           --output ${{env.DOTNET_ROOT}}/sql/sql-script.sql
-        env:
-          SQL_CONNECTION_STRING: ${{ secrets.SQL_CONNECTION_STRING }}
         
       - name: Azure SQL Deploy
         uses: Azure/sql-action@v1
         with:
           server-name: ${{ secrets.SQL_SERVER_URL }}
-          connection-string: ${{ secrets.SQL_CONNECTION_STRING }}
+          connection-string: ${{ env.SQL_CONNECTION_STRING }}
           sql-file: ${{env.DOTNET_ROOT}}/sql/sql-script.sql
 
 #   deploy:
