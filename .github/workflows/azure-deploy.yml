@@ -44,7 +44,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/builds/api/ET.WebAPI.Database
           
   migrate-sql-database:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       SQL_CONNECTION_STRING: ${{ secrets.SQL_CONNECTION_STRING }}
         
