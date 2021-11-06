@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.x'
-          include-prerelease: true
+          include-prerelease: false
 
       - name: Checkout repository and submodules
         uses: actions/checkout@v2
@@ -47,7 +47,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.x'
-          include-prerelease: true
+          include-prerelease: false
           
       - name: Checkout repository and submodules
         uses: actions/checkout@v2
@@ -55,10 +55,7 @@ jobs:
           submodules: recursive
           
       - name: Build ET.WebAPI.Database project
-        run: | 
-          pwd \
-          ls \
-          dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database/ -c Release
+        run: dotnet build D:/a/Engineering-Thesis/Engineering-Thesis/DotnetApi/ET.WebAPI.Database/ -c Release
           
       - name: Install EF Tool
         run: |
