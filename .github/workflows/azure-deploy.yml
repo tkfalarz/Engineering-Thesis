@@ -34,7 +34,7 @@ jobs:
       - name: Upload api build for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: .net-app-build
+          name: .net-app
           path: ${{env.DOTNET_ROOT}}/builds/api
           
   migrate-sql-database:
@@ -79,33 +79,55 @@ jobs:
           connection-string: ${{ env.SQL_CONNECTION_STRING }}
           sql-file: ${{env.DOTNET_ROOT}}/sql/sql-script.sql
 
-#   deploy:
-#     runs-on: ubuntu-latest
-#     needs: build
-#     environment:
-#       name: 'production'
-#       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+  Test:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    env:
+      SQL_CONNECTION_STRING: "Data Source=localhost;Uid=sa;Password=MSSQL(!)OnDocker;Persist Security Info=True;"
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app
+      
+      - name: Run MsSQL Server
+        uses: isbang/compose-action@v1.0.0
+        with:
+          compose-file: $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/docker-compose.integration-tests.yml
+        
+      - name: dotnet test
+        run: |
+          dotnet test $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ --no-build --verbosity minimal
 
-#     steps:
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-#       - name: Download artifact from build job
-#         uses: actions/download-artifact@v2
-#         with:
-#           name: .net-app
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app
 
+      - name: dotnet publish
+        run: |
+          dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ \
+          -c Release \
+          -o ${{env.DOTNET_ROOT}}/DotnetApi \
+          --no-build
 
-#       - name: dotnet publish
-#         run: |
-#           dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ \
-#           -c Release \
-#           -o ${{env.DOTNET_ROOT}}/DotnetApi \
-#           --no-build
-
-#       - name: Deploy to Azure Web App
-#         id: deploy-to-webapp
-#         uses: azure/webapps-deploy@v2
-#         with:
-#           app-name: 'ET-WebAPI'
-#           slot-name: 'production'
-#           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-#           package: .
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'ET-WebAPI'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          package: .
