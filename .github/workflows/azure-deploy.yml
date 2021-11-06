@@ -65,7 +65,7 @@ jobs:
       - name: Generate migration SQL script
         run:
           dotnet ef migrations script 
-          --project $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database/ 
+          --project D:/a/Engineering-Thesis/Engineering-Thesis/DotnetApi/ET.WebAPI.Database/
           --no-build 
           --idempotent 
           --context ApiDbContext 
