@@ -37,12 +37,6 @@ jobs:
           name: .net-app-build
           path: ${{env.DOTNET_ROOT}}/builds/api
           
-      - name: Upload database build for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: database-build
-          path: ${{env.DOTNET_ROOT}}/builds/api/ET.WebAPI.Database
-          
   migrate-sql-database:
     runs-on: windows-latest
     env:
@@ -61,7 +55,10 @@ jobs:
           submodules: recursive
           
       - name: Build ET.WebAPI.Database project
-        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database/ -c Release
+        run: | 
+          pwd \
+          ls \
+          dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Database/ -c Release
           
       - name: Install EF Tool
         run: |
