@@ -29,30 +29,15 @@ jobs:
       
       - name: Build
         run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ -c Release --no-restore
-        
-#       - name: Run MsSQL Server
-#         uses: isbang/compose-action@v1.0.0
-#         with:
-#           compose-file: DotnetApi/ET.WebAPI.Api/docker-compose.integration-tests.yml
-          
-#       - name: Test
-#         run: dotnet test $GITHUB_WORKSPACE/DotnetApi/ --no-build --no-restore --verbosity normal
-          
+
       - name: Publish
         run: dotnet publish $GITHUB_WORKSPACE/DotnetApi/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
-        
-      - name: Upload builded project
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-project
-          path: DotnetApi 
           
       - name: Upload api build for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp   
-          
           
   test:
     runs-on: windows-latest
@@ -65,16 +50,17 @@ jobs:
         with:
           dotnet-version: '5.0.x'
           
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+      - uses: actions/checkout@v2
         with:
-          name: .net-project
-          
-      - name: Check builded stuff
-        run: |
-            ls $GITHUB_WORKSPACE/DotnetApi/
-            echo "----"
-            ls $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/
+          submodules: recursive
+        
+      - name: Run MsSQL Server
+        uses: isbang/compose-action@v1.0.0
+        with:
+          compose-file: DotnetApi/ET.WebAPI.Api/docker-compose.integration-tests.yml
+
+      - name: Test
+        run: dotnet test DotnetApi/ --verbosity normal
             
 #   migrate-sql-database:
 #     runs-on: windows-latest
