@@ -37,47 +37,47 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/builds/api
           
-  migrate-sql-database:
-    runs-on: windows-latest
-    env:
-      SQL_CONNECTION_STRING: ${{ secrets.SQL_CONNECTION_STRING }}
+#   migrate-sql-database:
+#     runs-on: windows-latest
+#     env:
+#       SQL_CONNECTION_STRING: ${{ secrets.SQL_CONNECTION_STRING }}
         
-    steps:
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.x'
-          include-prerelease: false
+#     steps:
+#       - name: Set up .NET Core
+#         uses: actions/setup-dotnet@v1
+#         with:
+#           dotnet-version: '5.0.x'
+#           include-prerelease: false
           
-      - name: Checkout repository and submodules
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
+#       - name: Checkout repository and submodules
+#         uses: actions/checkout@v2
+#         with:
+#           submodules: recursive
           
-      - name: Build ET.WebAPI.Database project
-        run: dotnet build D:/a/Engineering-Thesis/Engineering-Thesis/DotnetApi/ET.WebAPI.Database/ -c Release
+#       - name: Build ET.WebAPI.Database project
+#         run: dotnet build D:/a/Engineering-Thesis/Engineering-Thesis/DotnetApi/ET.WebAPI.Database/ -c Release
           
-      - name: Install EF Tool
-        run: |
-          dotnet new tool-manifest
-          dotnet tool install dotnet-ef
+#       - name: Install EF Tool
+#         run: |
+#           dotnet new tool-manifest
+#           dotnet tool install dotnet-ef
     
-      - name: Generate migration SQL script
-        run:
-          dotnet ef migrations script 
-          --project D:/a/Engineering-Thesis/Engineering-Thesis/DotnetApi/ET.WebAPI.Database/
-          --no-build 
-          --idempotent 
-          --context ApiDbContext 
-          --configuration Release 
-          --output ${{env.DOTNET_ROOT}}/sql/sql-script.sql
+#       - name: Generate migration SQL script
+#         run:
+#           dotnet ef migrations script 
+#           --project D:/a/Engineering-Thesis/Engineering-Thesis/DotnetApi/ET.WebAPI.Database/
+#           --no-build 
+#           --idempotent 
+#           --context ApiDbContext 
+#           --configuration Release 
+#           --output ${{env.DOTNET_ROOT}}/sql/sql-script.sql
         
-      - name: Azure SQL Deploy
-        uses: Azure/sql-action@v1
-        with:
-          server-name: ${{ secrets.SQL_SERVER_URL }}
-          connection-string: ${{ env.SQL_CONNECTION_STRING }}
-          sql-file: ${{env.DOTNET_ROOT}}/sql/sql-script.sql
+#       - name: Azure SQL Deploy
+#         uses: Azure/sql-action@v1
+#         with:
+#           server-name: ${{ secrets.SQL_SERVER_URL }}
+#           connection-string: ${{ env.SQL_CONNECTION_STRING }}
+#           sql-file: ${{env.DOTNET_ROOT}}/sql/sql-script.sql
 
   test:
     runs-on: ubuntu-latest
@@ -93,18 +93,18 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
-          path: builds/api
+          path: $GITHUB_WORKSPACE/builds/api
       
       - name: Run MsSQL Server
         uses: isbang/compose-action@v1.0.0
         with:
-          compose-file: $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/docker-compose.integration-tests.yml
+          compose-file: $GITHUB_WORKSPACE/builds/api/ET.WebAPI.Api/docker-compose.integration-tests.yml
         
       - name: dotnet test
         run: |
           pwd \
           ls \
-          dotnet test builds/api --no-build --verbosity minimal
+          dotnet test $GITHUB_WORKSPACE/builds/api --no-build --verbosity minimal
 
   deploy:
     runs-on: ubuntu-latest
@@ -118,11 +118,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
-          path: builds/api
+          path: $GITHUB_WORKSPACE/builds/api
 
       - name: dotnet publish
         run: |
-          dotnet publish builds/api/ET.WebAPI.Api/ \
+          dotnet publish $GITHUB_WORKSPACE/builds/api/ET.WebAPI.Api/ \
           -c Release \
           -o ${{env.DOTNET_ROOT}}/DotnetApi \
           --no-build
