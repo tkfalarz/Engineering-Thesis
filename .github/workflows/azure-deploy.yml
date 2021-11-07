@@ -6,6 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - ET-WebAPI
 on:
   pull_request:
     branches: [ main ]
+    types: ['test']
   push:
     branches: [ main ]
   workflow_dispatch:
@@ -40,6 +41,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp   
           
   test:
+    if: ${{ github.event.label.name == 'test' }}
     runs-on: ubuntu-latest
     needs: build
     env:
