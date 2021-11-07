@@ -105,6 +105,7 @@ jobs:
               echo "----" 
               ls $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api
               echo "----"
+              cat $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/docker-compose.integration-tests.yml
     
       - name: Run MsSQL Server
         uses: isbang/compose-action@v1.0.0
