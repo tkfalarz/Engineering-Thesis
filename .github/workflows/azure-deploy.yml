@@ -13,8 +13,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      SQL_CONNECTION_STRING: "Data Source=localhost;Uid=sa;Password=MSSQL(!)OnDocker;Persist Security Info=True;"
 
     steps:
       - uses: actions/checkout@v2
@@ -67,6 +65,29 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp   
           
+          
+  test:
+    runs-on: windows-latest
+    needs: build
+    env:
+      SQL_CONNECTION_STRING: "Data Source=localhost;Uid=sa;Password=MSSQL(!)OnDocker;Persist Security Info=True;"
+      
+    steps:
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+          
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-project
+          
+      - name: Check builded stuff
+        run: |
+            ls $GITHUB_WORKSPACE/DotnetApi/
+            echo "----"
+            ls $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/
+            
 #   migrate-sql-database:
 #     runs-on: windows-latest
 #     env:
