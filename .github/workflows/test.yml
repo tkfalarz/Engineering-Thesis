@@ -27,15 +27,6 @@ jobs:
       
       - name: Build
         run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ -c Release --no-restore
-
-      - name: Publish
-        run: dotnet publish $GITHUB_WORKSPACE/DotnetApi/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
-          
-      - name: Upload api build for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp   
           
   test:
     runs-on: ubuntu-latest
