@@ -15,8 +15,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-            submodules: recursive
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -25,10 +23,10 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ --configuration Release
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish $GITHUB_WORKSPACE/DotnetApi/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -55,5 +53,5 @@ jobs:
         with:
           app-name: 'ET-WebAPI'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CCE93060DDD64F4F92DA44BC877222A2 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7822ED694DDA469F856C5F30FBAB3199 }}
           package: .
