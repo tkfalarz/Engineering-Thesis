@@ -29,13 +29,19 @@ jobs:
           submodules: recursive
           
       - name: Build Api
-        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ -c Release -o ${{env.DOTNET_ROOT}}/builds/api
+        run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ -c Release
 
+      - name: Publish Api
+        run: dotnet publish $GITHUB_WORKSPACE/DotnetApi/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        
       - name: Upload api build for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/builds/api
+          path: ${{env.DOTNET_ROOT}}/myapp
+          
+          
+
           
 #   migrate-sql-database:
 #     runs-on: windows-latest
@@ -98,14 +104,10 @@ jobs:
       - name: Run MsSQL Server
         uses: isbang/compose-action@v1.0.0
         with:
-          compose-file: $GITHUB_WORKSPACE/builds/api/ET.WebAPI.Api/docker-compose.integration-tests.yml
+          compose-file: $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/docker-compose.integration-tests.yml
         
       - name: dotnet test
-        run: |
-          ls /home/runner/work/Engineering-Thesis/Engineering-Thesis/builds/api/ 
-          pwd $GITHUB_WORKSPACE 
-          ls $GITHUB_WORKSPACE 
-          dotnet test $GITHUB_WORKSPACE/builds/api --no-build --verbosity normal
+        run: dotnet test $GITHUB_WORKSPACE/DotnetApi --no-build --verbosity normal
 
   deploy:
     runs-on: ubuntu-latest
@@ -119,14 +121,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
-          path: $GITHUB_WORKSPACE/builds/api
-
-      - name: dotnet publish
-        run: |
-          dotnet publish $GITHUB_WORKSPACE/builds/api/ET.WebAPI.Api/ \
-          -c Release \
-          -o ${{env.DOTNET_ROOT}}/DotnetApi \
-          --no-build
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
