@@ -4,8 +4,6 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - ET-WebAPI
 
 on:
-  pull_request:
-    branches: [ main ]
   push:
     branches: [ main ]
   workflow_dispatch:
