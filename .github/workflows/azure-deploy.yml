@@ -23,24 +23,12 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.x'
-          
-      - name: Check raw stuff
-        run: |
-            ls $GITHUB_WORKSPACE/DotnetApi/
-            echo "----"
-            ls $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/
-            
+
       - name: Restore
         run: dotnet restore $GITHUB_WORKSPACE/DotnetApi/
       
       - name: Build
         run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ -c Release --no-restore
-        
-      - name: Check builded stuff
-        run: |
-            ls $GITHUB_WORKSPACE/DotnetApi/
-            echo "----"
-            ls $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/
         
 #       - name: Run MsSQL Server
 #         uses: isbang/compose-action@v1.0.0
@@ -57,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-project
-          path: $GITHUB_WORKSPACE/DotnetApi 
+          path: DotnetApi 
           
       - name: Upload api build for deployment job
         uses: actions/upload-artifact@v2
