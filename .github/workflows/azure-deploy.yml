@@ -102,9 +102,9 @@ jobs:
         
       - name: dotnet test
         run: |
-          ls /home/runner/work/Engineering-Thesis/Engineering-Thesis/builds/api/ \
-          pwd $GITHUB_WORKSPACE \
-          ls $GITHUB_WORKSPACE \
+          ls /home/runner/work/Engineering-Thesis/Engineering-Thesis/builds/api/ 
+          pwd $GITHUB_WORKSPACE 
+          ls $GITHUB_WORKSPACE 
           dotnet test $GITHUB_WORKSPACE/builds/api --no-build --verbosity normal
 
   deploy:
