@@ -40,7 +40,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp   
           
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
     env:
       SQL_CONNECTION_STRING: "Data Source=localhost;Uid=sa;Password=MSSQL(!)OnDocker;Persist Security Info=True;"
