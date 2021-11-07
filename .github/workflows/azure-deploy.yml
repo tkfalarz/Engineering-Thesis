@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/builds/api
+          path: builds/api
           
   migrate-sql-database:
     runs-on: windows-latest
@@ -93,6 +93,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
+          path: builds/api
       
       - name: Run MsSQL Server
         uses: isbang/compose-action@v1.0.0
@@ -101,7 +102,9 @@ jobs:
         
       - name: dotnet test
         run: |
-          dotnet test $GITHUB_WORKSPACE/DotnetApi/ --no-build --verbosity minimal
+          pwd \
+          ls \
+          dotnet test builds/api --no-build --verbosity minimal
 
   deploy:
     runs-on: ubuntu-latest
@@ -115,10 +118,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: .net-app
+          path: builds/api
 
       - name: dotnet publish
         run: |
-          dotnet publish $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/ \
+          dotnet publish builds/api/ET.WebAPI.Api/ \
           -c Release \
           -o ${{env.DOTNET_ROOT}}/DotnetApi \
           --no-build
