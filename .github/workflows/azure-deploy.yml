@@ -27,7 +27,7 @@ jobs:
           dotnet-version: '5.0.x'
           
       - name: Restore
-        run: dotnet restore
+        run: dotnet restore $GITHUB_WORKSPACE/DotnetApi/
       
       - name: Build
         run: dotnet build $GITHUB_WORKSPACE/DotnetApi/ -c Release --no-restore
