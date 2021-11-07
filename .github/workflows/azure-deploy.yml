@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: builds/api
+          path: ${{env.DOTNET_ROOT}}/builds/api
           
   migrate-sql-database:
     runs-on: windows-latest
