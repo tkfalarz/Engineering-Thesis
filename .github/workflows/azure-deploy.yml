@@ -94,20 +94,21 @@ jobs:
     env:
       SQL_CONNECTION_STRING: "Data Source=localhost;Uid=sa;Password=MSSQL(!)OnDocker;Persist Security Info=True;"
     
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: .net-app
-          path: builds/api
-      
+    steps:   
+      - name: check paths
+        run: |
+              ls $GITHUB_WORKSPACE/DotnetApi
+              echo "----" 
+              ls $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api
+              echo "----"
+    
       - name: Run MsSQL Server
         uses: isbang/compose-action@v1.0.0
         with:
           compose-file: $GITHUB_WORKSPACE/DotnetApi/ET.WebAPI.Api/docker-compose.integration-tests.yml
         
       - name: dotnet test
-        run: dotnet test $GITHUB_WORKSPACE/DotnetApi --no-build --verbosity normal
+        run: dotnet test $GITHUB_WORKSPACE/DotnetApi/ --no-build --verbosity normal
 
   deploy:
     runs-on: ubuntu-latest
