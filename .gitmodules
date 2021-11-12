@@ -4,3 +4,6 @@
 [submodule "Bme680"]
 	path = Bme680
 	url = https://github.com/tkfalarz/ET-BME680-Sensor.git
+[submodule "ReactApp"]
+	path = ReactApp
+	url = https://github.com/tkfalarz/ET-React-App.git
